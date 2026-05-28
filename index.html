@@ -555,8 +555,8 @@ async function callClaude(msg){
       },
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sysPrompt(),messages:chatHist})
   });
-  const d=await r.json();
-  const t=d.content?.map(b=>b.text||'').join('')||'Something went wrong.';
+ const text=await r.text();let d;try{d=JSON.parse(text);}catch(e){d={};}
+const t=d.content?.map(b=>b.text||'').join('')||d.error?.message||'Error: '+text;
   chatHist.push({role:'assistant',content:t});
   return t;
 }
