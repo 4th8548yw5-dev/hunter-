@@ -419,7 +419,7 @@ async function scanScreenshot(event){
           'Content-Type':'application/json',
           },
         body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',
+          model:'claude-3-5-sonnet-20241022',
           max_tokens:500,
           messages:[{role:'user',content:[
             {type:'image',source:{type:'base64',media_type:mime,data:b64}},
@@ -553,7 +553,7 @@ async function callClaude(msg){
     headers:{
       'Content-Type':'application/json',
       },
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sysPrompt(),messages:chatHist})
+    body:JSON.stringify({model:'claude-3-5-sonnet-20241022',max_tokens:1000,system:sysPrompt(),messages:chatHist})
   });
  const text=await r.text();let d;try{d=JSON.parse(text);}catch(e){d={};}
 const t=d.content?.map(b=>b.text||'').join('')||d.error?.message||'Error: '+text;
