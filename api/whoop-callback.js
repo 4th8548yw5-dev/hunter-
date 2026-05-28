@@ -13,34 +13,39 @@ export default async function handler(req, res) {
         redirect_uri: process.env.WHOOP_REDIRECT_URI
       })
     });
-    const tokens = await tokenRes.json();
+    const tokenText = await tokenRes.text();
+    let tokens;
+    try { tokens = JSON.parse(tokenText); } catch(e) { return res.status(500).send('Token error: ' + tokenText); }
     if (!tokens.access_token) return res.status(400).json({ error: 'No token', tokens });
-    const [recovery, sleep, profile] = await Promise.all([
-      fetch('https://api.prod.whoop.com/developer/v1/recovery?limit=1', { headers: { Authorization: `Bearer ${tokens.access_token}` } }).then(r => r.json()),
-      fetch('https://api.prod.whoop.com/developer/v1/activity/sleep?limit=1', { headers: { Authorization: `Bearer ${tokens.access_token}` } }).then(r => r.json()),
-      fetch('https://api.prod.whoop.com/developer/v1/user/profile/basic', { headers: { Authorization: `Bearer ${tokens.access_token}` } }).then(r => r.json())
+    const headers = { Authorization: `Bearer ${tokens.access_token}` };
+    const [recRes, slpRes, profRes] = await Promise.all([
+      fetch('https://api.prod.whoop.com/developer/v1/recovery?limit=1', { headers }),
+      fetch('https://api.prod.whoop.com/developer/v1/activity/sleep?limit=1', { headers }),
+      fetch('https://api.prod.whoop.com/developer/v1/user/profile/basic', { headers })
     ]);
-    const rec = recovery?.records?.[0];
-    const slp = sleep?.records?.[0];
+    const rec = await recRes.json();
+    const slp = await slpRes.json();
+    const prof = await profRes.json();
+    const r = rec?.records?.[0];
+    const s = slp?.records?.[0];
     const data = {
-      recovery: rec?.score?.recovery_score ?? null,
-      hrv: rec?.score?.hrv_rmssd_milli ?? null,
-      rhr: rec?.score?.resting_heart_rate ?? null,
-      strain: rec?.score?.strain ?? null,
-      slpperf: slp?.score?.sleep_performance_percentage ?? null,
-      slpdur: slp?.score?.total_in_bed_time_milli ? slp.score.total_in_bed_time_milli / 3600000 : null,
-      rem: slp?.score?.stage_summary?.total_rem_sleep_time_milli ? slp.score.stage_summary.total_rem_sleep_time_milli / 3600000 : null,
-      deep: slp?.score?.stage_summary?.total_slow_wave_sleep_time_milli ? slp.score.stage_summary.total_slow_wave_sleep_time_milli / 3600000 : null,
-      spo2: slp?.score?.respiratory_rate ?? null,
-      firstName: profile?.first_name ?? ''
+      recovery: r?.score?.recovery_score ?? null,
+      hrv: r?.score?.hrv_rmssd_milli ?? null,
+      rhr: r?.score?.resting_heart_rate ?? null,
+      strain: r?.score?.strain ?? null,
+      slpperf: s?.score?.sleep_performance_percentage ?? null,
+      slpdur: s?.score?.total_in_bed_time_milli ? Math.round(s.score.total_in_bed_time_milli/360000)/10 : null,
+      rem: s?.score?.stage_summary?.total_rem_sleep_time_milli ? Math.round(s.score.stage_summary.total_rem_sleep_time_milli/360000)/10 : null,
+      deep: s?.score?.stage_summary?.total_slow_wave_sleep_time_milli ? Math.round(s.score.stage_summary.total_slow_wave_sleep_time_milli/360000)/10 : null,
+      spo2: s?.score?.respiratory_rate ?? null
     };
     const html = `<!DOCTYPE html><html><head><script>
-      localStorage.setItem('whoop_data', JSON.stringify(${JSON.stringify(data)}));
+      localStorage.setItem('whoop_data', '${JSON.stringify(data).replace(/'/g, "\\'")}');
       window.location.href = '/';
-    </script></head><body>Connecting...</body></html>`;
+    <\/script></head><body>Loading your WHOOP data...</body></html>`;
     res.setHeader('Content-Type', 'text/html');
-    res.status(200).send(html);
+    return res.status(200).send(html);
   } catch(e) {
-    res.status(500).json({ error: e.message });
+    return res.status(500).json({ error: e.message });
   }
 }
