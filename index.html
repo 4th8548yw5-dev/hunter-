@@ -585,7 +585,7 @@ function restoreForm(){
   const g=document.getElementById('w-goal');if(g)g.value=w.goal||'Performance';
   Object.keys(S.supps).forEach(k=>{const e=document.getElementById('sc-'+k);if(e)e.classList.toggle('done',S.supps[k]);});
   liveW();
-}load();const wd=localStorage.getItem('whoop_data');if(wd){try{const w=JSON.parse(wd);S.whoop=Object.assign(S.whoop,w);localStorage.removeItem('whoop_data');save();}catch(e){}}renderHome();renderRings();renderGymDay();renderExercises();renderHistory();restoreForm();if(S.workoutHistory.length)sT('gym-sub',S.workoutHistory.length+' workouts logged');
+}load();const wd=localStorage.getItem('whoop_data');if(wd){try{const w=JSON.parse(wd);if(w.recovery!==undefined)w.rec=w.recovery;S.whoop=Object.assign(S.whoop,w);localStorage.removeItem('whoop_data');save();}catch(e){}}renderHome();renderRings();renderGymDay();renderExercises();renderHistory();restoreForm();if(S.workoutHistory.length)sT('gym-sub',S.workoutHistory.length+' workouts logged');
 </script>
 </body>
 </html>
