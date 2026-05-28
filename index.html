@@ -1,50 +1,29 @@
-Good morning
+Last login: Thu May 28 11:31:27 on ttys000
+family@Mac ~ % cat ~/Downloads/index.html | pbcopy
+family@Mac ~ % >....                                                                                                    
+async function sendMsg(){
+  if(busy)return;
+  const inp=document.getElementById('cinput');const txt=inp.value.trim();if(!txt)return;
+  inp.value='';appendMsg(txt,'user');busy=true;
+  const typing=appendMsg('<span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>','ai');
+  try{
+    const r=await callClaude(txt);
+    typing.querySelector('.cbubble').innerHTML=r.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  }catch(e){typing.querySelector('.cbubble').textContent='Could not reach Claude. Please try again.';}
+  busy=false;
+}
+function qsend(t){document.getElementById('cinput').value=t;sendMsg();}
+function restoreForm(){
+  const w=S.whoop;
+  const m={rec:'w-rec',hrv:'w-hrv',rhr:'w-rhr',strain:'w-strain',slpperf:'w-slpperf',slpdur:'w-slpdur',rem:'w-rem',deep:'w-deep',spo2:'w-spo2',weight:'w-weight'};
+  Object.entries(m).forEach(([k,id])=>{const e=document.getElementById(id);if(e&&w[k]!==null&&w[k]!==undefined)e.value=w[k];});
+  const g=document.getElementById('w-goal');if(g)g.value=w.goal||'Performance';
+  Object.keys(S.supps).forEach(k=>{const e=document.getElementById('sc-'+k);if(e)e.classList.toggle('done',S.supps[k]);});
+  liveW();
+}
+load();renderHome();renderRings();renderGymDay();renderExercises();renderHistory();restoreForm();
+if(S.workoutHistory.length)sT('gym-sub',S.workoutHistory.length+' workouts logged');
+</script>
+</body>
+</html>
 
-STREAK
-0
-—
-RECOVERY
-—
-—
-STRAIN
-—
-—
-SLEEP
-—
-
-Enter WHOOP data
-
-— cal target
-
-— training
-TODAY'S TRAINING
-DAY 1 OF 4
-Arms & Shoulders
-Biceps · Triceps · Delts
-✓ Done
-Rest Day
-Skip
-PLAN MY DAY
-What's today looking like?
-Tell me your schedule — I'll tell you when to train, what to eat, everything.
-Plan it →
-HYDRATION
-0/ 8 glasses
-+ Add
-DAILY GOALS
-
-Morning stretch
-
-Take supplements
-
-Hit gym
-
-Log nutrition
-
-HOME
-
-WHOOP
-
-GYM
-
-COACH
