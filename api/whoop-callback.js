@@ -16,14 +16,35 @@ export default async function handler(req, res) {
     const tokens = await tokenRes.json();
     if (!tokens.access_token) return res.status(400).json({ error: 'No token', tokens });
     const headers = { Authorization: `Bearer ${tokens.access_token}` };
-    const cycleId = 1529083443;
-    const [c1, c2, c3, c4] = await Promise.all([
-      fetch(`https://api.prod.whoop.com/developer/v2/cycle/${cycleId}`, { headers }).then(r=>r.text()),
-      fetch(`https://api.prod.whoop.com/developer/v2/cycle/${cycleId}/recovery`, { headers }).then(r=>r.text()),
-      fetch(`https://api.prod.whoop.com/developer/v1/cycle/${cycleId}/recovery`, { headers }).then(r=>r.text()),
-      fetch(`https://api.prod.whoop.com/developer/v2/recovery?limit=1`, { headers }).then(r=>r.text()),
+    const cyclesRes = await fetch('https://api.prod.whoop.com/developer/v2/cycle?limit=1', { headers });
+    const cycles = await cyclesRes.json();
+    const c = cycles?.records?.[0];
+    const cycleId = c?.id;
+    const [sleepRes, recoveryRes] = await Promise.all([
+      fetch('https://api.prod.whoop.com/developer/v2/activity/sleep?limit=1', { headers }),
+      fetch(`https://api.prod.whoop.com/developer/v2/cycle/${cycleId}/recovery`, { headers })
     ]);
-    return res.status(200).json({ c1, c2, c3, c4 });
+    const sleep = await sleepRes.json();
+    const recovery = await recoveryRes.json();
+    const s = sleep?.records?.[0];
+    const r = recovery;
+    const data = {
+      strain: c?.score?.strain ? Math.round(c.score.strain * 10) / 10 : null,
+      recovery: r?.score?.recovery_score ? Math.round(r.score.recovery_score) : null,
+      hrv: r?.score?.hrv_rmssd_milli ? Math.round(r.score.hrv_rmssd_milli) : null,
+      rhr: r?.score?.resting_heart_rate ? Math.round(r.score.resting_heart_rate) : null,
+      spo2: r?.score?.spo2_percentage ? Math.round(r.score.spo2_percentage * 10) / 10 : null,
+      slpperf: s?.score?.sleep_performance_percentage ?? null,
+      slpdur: s?.score?.stage_summary?.total_in_bed_time_milli ? Math.round(s.score.stage_summary.total_in_bed_time_milli / 360000) / 10 : null,
+      rem: s?.score?.stage_summary?.total_rem_sleep_time_milli ? Math.round(s.score.stage_summary.total_rem_sleep_time_milli / 360000) / 10 : null,
+      deep: s?.score?.stage_summary?.total_slow_wave_sleep_time_milli ? Math.round(s.score.stage_summary.total_slow_wave_sleep_time_milli / 360000) / 10 : null
+    };
+    const html = `<!DOCTYPE html><html><head><script>
+      localStorage.setItem('whoop_data', '${JSON.stringify(data).replace(/'/g, "\\'")}');
+      window.location.href = '/';
+    <\/script></head><body>Loading your WHOOP data...</body></html>`;
+    res.setHeader('Content-Type', 'text/html');
+    return res.status(200).send(html);
   } catch(e) {
     return res.status(500).json({ error: e.message });
   }
