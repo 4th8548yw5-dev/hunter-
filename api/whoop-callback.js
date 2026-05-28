@@ -29,11 +29,11 @@ export default async function handler(req, res) {
     const s = sleep?.records?.[0];
     const r = recovery;
     const data = {
-      strain: c?.score?.strain ? Math.round(c.score.strain * 10) / 10 : null,
-      recovery: r?.score?.recovery_score ? Math.round(r.score.recovery_score) : null,
+      rec: r?.score?.recovery_score ? Math.round(r.score.recovery_score) : null,
       hrv: r?.score?.hrv_rmssd_milli ? Math.round(r.score.hrv_rmssd_milli) : null,
       rhr: r?.score?.resting_heart_rate ? Math.round(r.score.resting_heart_rate) : null,
       spo2: r?.score?.spo2_percentage ? Math.round(r.score.spo2_percentage * 10) / 10 : null,
+      strain: c?.score?.strain ? Math.round(c.score.strain * 10) / 10 : null,
       slpperf: s?.score?.sleep_performance_percentage ?? null,
       slpdur: s?.score?.stage_summary?.total_in_bed_time_milli ? Math.round(s.score.stage_summary.total_in_bed_time_milli / 360000) / 10 : null,
       rem: s?.score?.stage_summary?.total_rem_sleep_time_milli ? Math.round(s.score.stage_summary.total_rem_sleep_time_milli / 360000) / 10 : null,
@@ -41,6 +41,8 @@ export default async function handler(req, res) {
     };
     const html = `<!DOCTYPE html><html><head><script>
       localStorage.setItem('whoop_data', '${JSON.stringify(data).replace(/'/g, "\\'")}');
+      localStorage.setItem('whoop_token', '${tokens.access_token}');
+      localStorage.setItem('whoop_refresh', '${tokens.refresh_token || ''}');
       window.location.href = '/';
     <\/script></head><body>Loading your WHOOP data...</body></html>`;
     res.setHeader('Content-Type', 'text/html');
