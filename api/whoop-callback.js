@@ -16,17 +16,18 @@ export default async function handler(req, res) {
     const tokens = await tokenRes.json();
     if (!tokens.access_token) return res.status(400).json({ error: 'No token', tokens });
     const headers = { Authorization: `Bearer ${tokens.access_token}` };
-    const [cyclesRes, sleepRes, recoveryRes] = await Promise.all([
-      fetch('https://api.prod.whoop.com/developer/v2/cycle?limit=1', { headers }),
-      fetch('https://api.prod.whoop.com/developer/v2/activity/sleep?limit=1', { headers }),
-     fetch('https://api.prod.whoop.com/developer/v1/recovery?limit=1', { headers })
-    ]);
+    const cyclesRes = await fetch('https://api.prod.whoop.com/developer/v2/cycle?limit=1', { headers });
     const cycles = await cyclesRes.json();
+    const c = cycles?.records?.[0];
+    const cycleId = c?.id;
+    const [sleepRes, recoveryRes] = await Promise.all([
+      fetch('https://api.prod.whoop.com/developer/v2/activity/sleep?limit=1', { headers }),
+      fetch(`https://api.prod.whoop.com/developer/v1/cycle/${cycleId}/recovery`, { headers })
+    ]);
     const sleep = await sleepRes.json();
     const recovery = await recoveryRes.json();
-    const c = cycles?.records?.[0];
     const s = sleep?.records?.[0];
-    const r = recovery?.records?.[0];
+    const r = recovery;
     const data = {
       strain: c?.score?.strain ? Math.round(c.score.strain * 10) / 10 : null,
       recovery: r?.score?.recovery_score ?? null,
