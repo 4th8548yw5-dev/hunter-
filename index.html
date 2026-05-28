@@ -1,6 +1,571 @@
-Last login: Thu May 28 11:31:27 on ttys000
-family@Mac ~ % cat ~/Downloads/index.html | pbcopy
-family@Mac ~ % >....                                                                                                    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>My Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#fff;--text2:#888;--text3:#444;
+  --green:#00d68f;--yellow:#f5a623;--red:#ff4d4d;--blue:#4db8ff;--purple:#9d7fff;
+  --nav-h:82px;
+}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100%;overflow-x:hidden}
+body{padding-bottom:calc(var(--nav-h) + 16px)}
+.page{display:none;animation:fi .18s ease}
+.page.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.topbar{padding:54px 22px 14px;display:flex;justify-content:space-between;align-items:flex-end}
+.topbar-title{font-size:26px;font-weight:700;letter-spacing:-.5px}
+.topbar-sub{font-size:13px;color:var(--text2);margin-top:3px}
+.slabel{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:16px 22px 8px}
+.card{background:var(--bg2);border-radius:18px;margin:0 16px 10px;overflow:hidden}
+.rings-row{display:flex;justify-content:space-around;padding:22px 16px 18px;background:var(--bg2);border-radius:18px;margin:0 16px 10px}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.ring-svg{width:82px;height:82px}
+.ring-name{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)}
+.ring-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.pills-row{display:flex;gap:7px;padding:0 16px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}
+.pills-row::-webkit-scrollbar{display:none}
+.spill{flex-shrink:0;display:flex;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border2);border-radius:999px;padding:7px 13px;font-size:12px;font-weight:600;color:var(--text2)}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.gymday-card{background:var(--bg2);border-radius:18px;margin:0 16px 10px;padding:20px}
+.gymday-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+.gymday-name{font-size:22px;font-weight:800;letter-spacing:-.5px;margin-top:4px}
+.gymday-sub{font-size:13px;color:var(--text2);margin-top:3px}
+.day-dots{display:flex;gap:6px;margin-top:12px}
+.day-dot{height:5px;flex:1;border-radius:3px;background:var(--bg4)}
+.day-dot.done{background:var(--green)}.day-dot.active{background:#fff}
+.gymday-btns{display:flex;gap:8px;margin-top:16px}
+.gdbtn{flex:1;padding:12px;border-radius:12px;border:none;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .15s}
+.gdbtn:active{opacity:.7}
+.gdbtn-green{background:var(--green);color:#000}
+.gdbtn-dim{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.today-card{background:var(--bg2);border-radius:18px;margin:0 16px 10px;overflow:hidden}
+.today-hdr{padding:16px 18px 10px;border-bottom:1px solid var(--border)}
+.today-title{font-size:14px;font-weight:700}
+.today-hint{font-size:12px;color:var(--text3);margin-top:3px}
+textarea.today-ta{width:100%;background:transparent;border:none;padding:14px 18px;font-size:14px;font-family:'Inter',sans-serif;color:#fff;line-height:1.6;resize:none;outline:none;min-height:88px}
+textarea.today-ta::placeholder{color:var(--text3)}
+.today-footer{padding:8px 18px 14px;display:flex;justify-content:flex-end;border-top:1px solid var(--border)}
+.today-btn{background:var(--green);color:#000;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer}
+.water-card{background:var(--bg2);border-radius:18px;margin:0 16px 10px;padding:18px}
+.water-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.water-num{font-size:30px;font-weight:700;letter-spacing:-1px}
+.water-unit{font-size:14px;color:var(--text2);margin-left:3px}
+.water-addbtn{background:rgba(77,184,255,0.12);border:none;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;color:var(--blue);font-family:'Inter',sans-serif;cursor:pointer}
+.wdots{display:flex;gap:4px}
+.wdot{flex:1;height:5px;border-radius:3px;background:var(--bg3);transition:background .3s}
+.wdot.on{background:var(--blue)}
+.goal-row{display:flex;align-items:center;gap:13px;padding:14px 18px;border-bottom:1px solid var(--border);cursor:pointer}
+.goal-row:last-child{border:none}
+.gcheck{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.gcheck.done{background:var(--green);border-color:var(--green)}
+.gcheck svg{width:11px;height:11px;fill:none;stroke:#000;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .2s}
+.gcheck.done svg{opacity:1}
+.gtext{font-size:14px;font-weight:500;transition:color .2s}
+.gtext.done{color:var(--text3)}
+.form-card{background:var(--bg2);border-radius:18px;margin:0 16px 10px;overflow:hidden}
+.form-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
+.form-row:last-child{border:none}
+.flabel{font-size:14px;color:var(--text2);font-weight:500}
+.finput-wrap{display:flex;align-items:center;gap:5px}
+.finput{background:transparent;border:none;color:#fff;font-size:15px;font-weight:600;font-family:'Inter',sans-serif;text-align:right;width:70px;outline:none}
+.finput::-webkit-inner-spin-button{opacity:0}
+select.finput{-webkit-appearance:none;cursor:pointer;width:130px}
+.funit{font-size:12px;color:var(--text3)}
+.bigbtn{display:block;width:calc(100% - 32px);margin:0 16px;padding:16px;border-radius:14px;border:none;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;text-align:center;transition:opacity .15s}
+.bigbtn:active{opacity:.8}
+.bigbtn-green{background:var(--green);color:#000}
+.bigbtn-dim{background:var(--bg2);color:#fff;border:1px solid var(--border2)}
+
+/* SCAN SCREENSHOT */
+.scan-card{background:var(--bg2);border-radius:18px;margin:0 16px 10px;overflow:hidden;border:1px solid var(--border2)}
+.scan-inner{padding:18px}
+.scan-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.scan-sub{font-size:12px;color:var(--text3);line-height:1.5}
+.scan-btn-row{display:flex;gap:8px;margin-top:14px}
+.scan-btn{flex:1;padding:13px;border-radius:12px;border:none;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.scan-btn-green{background:var(--green);color:#000}
+.scan-btn-dim{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.scan-preview{width:100%;border-radius:12px;margin-top:12px;display:none;max-height:220px;object-fit:contain;background:var(--bg3)}
+.scan-status{font-size:13px;color:var(--text2);margin-top:10px;text-align:center;display:none;min-height:20px}
+input[type=file]{display:none}
+
+/* GYM */
+.exercise-card{background:var(--bg2);border-radius:18px;margin:0 16px 10px;overflow:hidden}
+.ex-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border)}
+.ex-name{font-size:15px;font-weight:700}
+.ex-del{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:0 4px;line-height:1}
+.sets-table{width:100%;border-collapse:collapse}
+.sets-table th{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;padding:10px 18px 6px;text-align:left}
+.sets-table th:not(:first-child){text-align:center}
+.sets-table td{padding:8px 18px;border-top:1px solid var(--border);font-size:14px}
+.sets-table td:not(:first-child){text-align:center}
+.set-num{font-size:12px;color:var(--text3);font-weight:600}
+.set-input{background:var(--bg3);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;text-align:center;width:58px;padding:7px 6px;outline:none}
+.set-input:focus{background:var(--bg4)}
+.set-del{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 6px;line-height:1}
+.ex-footer{padding:12px 18px;border-top:1px solid var(--border)}
+.ex-add-set{width:100%;background:var(--bg3);border:none;border-radius:10px;color:var(--text2);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;padding:10px;cursor:pointer}
+.add-ex-row{display:flex;gap:8px;margin:0 16px 10px}
+.add-ex-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:13px 16px;font-size:14px;font-family:'Inter',sans-serif;color:#fff;outline:none}
+.add-ex-input::placeholder{color:var(--text3)}
+.add-ex-btn{background:var(--green);border:none;border-radius:12px;color:#000;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;padding:13px 18px;cursor:pointer}
+.history-item{padding:14px 18px;border-bottom:1px solid var(--border)}
+.history-item:last-child{border:none}
+.history-date{font-size:11px;color:var(--text3);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.history-ex{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* COACH */
+.coach-page{display:none;flex-direction:column;height:calc(100dvh - var(--nav-h));overflow:hidden}
+.coach-page.active{display:flex}
+.coach-top{padding:54px 22px 12px;flex-shrink:0;border-bottom:1px solid var(--border)}
+.coach-top-title{font-size:22px;font-weight:700}
+.coach-top-sub{font-size:12px;color:var(--text2);margin-top:3px}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.chat-msgs::-webkit-scrollbar{display:none}
+.cmsg{display:flex;gap:9px;align-items:flex-end}
+.cmsg.user{flex-direction:row-reverse}
+.cav{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;background:var(--green);color:#000}
+.cbubble{max-width:78%;padding:11px 15px;border-radius:16px;font-size:14px;line-height:1.65;word-break:break-word}
+.cmsg.ai .cbubble{background:var(--bg2)}
+.cmsg.user .cbubble{background:rgba(255,255,255,0.09)}
+.chat-bottom{flex-shrink:0;padding:10px 16px 14px;background:var(--bg);border-top:1px solid var(--border)}
+.qrow{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.qrow::-webkit-scrollbar{display:none}
+.qchip{flex-shrink:0;background:var(--bg2);border:1px solid var(--border2);border-radius:999px;padding:7px 13px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.qchip:active{opacity:.7}
+.cinput-row{display:flex;gap:9px;align-items:center}
+.cinput{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:13px;padding:12px 15px;font-size:14px;font-family:'Inter',sans-serif;color:#fff;outline:none}
+.cinput::placeholder{color:var(--text3)}
+.csend{width:42px;height:42px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.csend svg{width:16px;height:16px;fill:#000}
+.tdot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--text3);animation:bop 1.2s infinite;margin:0 2px}
+.tdot:nth-child(2){animation-delay:.2s}.tdot:nth-child(3){animation-delay:.4s}
+@keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:rgba(10,10,10,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:10px;z-index:999}
+.nitem{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0;border:none;background:transparent;color:var(--text3);font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:color .15s}
+.nitem.active{color:#fff}
+.nitem svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+
+<!-- ══ HOME ══ -->
+<div class="page active" id="pg-home">
+  <div class="topbar">
+    <div><div class="topbar-title" id="greeting">Good morning</div><div class="topbar-sub" id="datestr"></div></div>
+    <div style="text-align:right"><div style="font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.06em">Streak</div><div style="font-size:24px;font-weight:800;letter-spacing:-1px" id="streak-num">0</div></div>
+  </div>
+  <div class="rings-row">
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 82 82"><circle cx="41" cy="41" r="33" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/><circle id="hr-rec" cx="41" cy="41" r="33" fill="none" stroke="#00d68f" stroke-width="7" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="207" transform="rotate(-90 41 41)" style="transition:all .8s ease"/><text x="41" y="45" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" font-family="Inter,sans-serif" id="ht-rec">—</text></svg>
+      <div class="ring-name">Recovery</div>
+      <div class="ring-badge" id="hb-rec" style="background:rgba(0,214,143,0.08);color:var(--green)">—</div>
+    </div>
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 82 82"><circle cx="41" cy="41" r="33" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/><circle id="hr-str" cx="41" cy="41" r="33" fill="none" stroke="#4db8ff" stroke-width="7" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="207" transform="rotate(-90 41 41)" style="transition:all .8s ease"/><text x="41" y="45" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" font-family="Inter,sans-serif" id="ht-str">—</text></svg>
+      <div class="ring-name">Strain</div>
+      <div class="ring-badge" id="hb-str" style="background:rgba(77,184,255,0.08);color:var(--blue)">—</div>
+    </div>
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 82 82"><circle cx="41" cy="41" r="33" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/><circle id="hr-slp" cx="41" cy="41" r="33" fill="none" stroke="#9d7fff" stroke-width="7" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="207" transform="rotate(-90 41 41)" style="transition:all .8s ease"/><text x="41" y="45" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" font-family="Inter,sans-serif" id="ht-slp">—</text></svg>
+      <div class="ring-name">Sleep</div>
+      <div class="ring-badge" id="hb-slp" style="background:rgba(157,127,255,0.08);color:var(--purple)">—</div>
+    </div>
+  </div>
+  <div class="pills-row">
+    <div class="spill"><div class="sdot" id="pd-rec" style="background:var(--text3)"></div><span id="pt-rec">Add WHOOP scores</span></div>
+    <div class="spill"><div class="sdot" style="background:var(--blue)"></div><span id="pt-cal">— cal target</span></div>
+    <div class="spill"><div class="sdot" style="background:var(--yellow)"></div><span id="pt-train">— training</span></div>
+  </div>
+  <div class="slabel">Today's Training</div>
+  <div class="gymday-card">
+    <div class="gymday-label">Day <span id="cycle-num">1</span> of 4</div>
+    <div class="gymday-name" id="day-name">Arms & Shoulders</div>
+    <div class="gymday-sub" id="day-sub">Biceps · Triceps · Delts</div>
+    <div class="day-dots" id="day-dots"></div>
+    <div class="gymday-btns">
+      <button class="gdbtn gdbtn-green" onclick="markGymDone()">✓ Done</button>
+      <button class="gdbtn gdbtn-dim" onclick="markRestDay()">Rest Day</button>
+      <button class="gdbtn gdbtn-dim" onclick="skipDay()">Skip</button>
+    </div>
+  </div>
+  <div class="slabel">Plan My Day</div>
+  <div class="today-card">
+    <div class="today-hdr">
+      <div class="today-title">What's today looking like?</div>
+      <div class="today-hint">Tell me your schedule — I'll plan when to train, what to eat, everything.</div>
+    </div>
+    <textarea class="today-ta" id="today-input" placeholder="e.g. Doctor's at 3, dinner with parents at 7, nothing else planned..."></textarea>
+    <div class="today-footer"><button class="today-btn" onclick="planMyDay()">Plan it →</button></div>
+  </div>
+  <div class="slabel">Hydration</div>
+  <div class="water-card">
+    <div class="water-top">
+      <div><span class="water-num" id="water-num">0</span><span class="water-unit">/ 8 glasses</span></div>
+      <button class="water-addbtn" onclick="addWater()">+ Add</button>
+    </div>
+    <div class="wdots" id="wdots"></div>
+  </div>
+  <div class="slabel">Daily Goals</div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="goal-row" onclick="toggleGoal(0)"><div class="gcheck" id="gc0"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div><div class="gtext" id="gt0">Take supplements</div></div>
+    <div class="goal-row" onclick="toggleGoal(1)"><div class="gcheck" id="gc1"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div><div class="gtext" id="gt1">Hit the gym</div></div>
+    <div class="goal-row" onclick="toggleGoal(2)"><div class="gcheck" id="gc2"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div><div class="gtext" id="gt2">Log nutrition</div></div>
+  </div>
+</div>
+
+<!-- ══ WHOOP ══ -->
+<div class="page" id="pg-whoop">
+  <div class="topbar"><div><div class="topbar-title">WHOOP</div><div class="topbar-sub">Update each morning</div></div></div>
+
+  <!-- SCAN SCREENSHOT -->
+  <div class="slabel">Scan Screenshot</div>
+  <div class="scan-card">
+    <div class="scan-inner">
+      <div class="scan-title">Auto-fill from WHOOP app</div>
+      <div class="scan-sub">Take a screenshot of your WHOOP app, upload it here, and Claude will read it and fill in all your scores automatically.</div>
+      <div class="scan-btn-row">
+        <label class="scan-btn scan-btn-green" for="scan-upload">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Upload Screenshot
+        </label>
+        <input type="file" id="scan-upload" accept="image/*" onchange="scanScreenshot(event)"/>
+      </div>
+      <img id="scan-preview" class="scan-preview" alt="WHOOP screenshot"/>
+      <div id="scan-status" class="scan-status"></div>
+    </div>
+  </div>
+
+  <div class="slabel">The Big Three</div>
+  <div class="form-card">
+    <div class="form-row"><span class="flabel">Recovery</span><div class="finput-wrap"><input class="finput" type="number" id="w-rec" min="0" max="100" placeholder="—" oninput="liveW()"/><span class="funit">%</span></div></div>
+    <div class="form-row"><span class="flabel">Strain</span><div class="finput-wrap"><input class="finput" type="number" id="w-strain" min="0" max="21" step="0.1" placeholder="—" oninput="liveW()"/><span class="funit">/ 21</span></div></div>
+    <div class="form-row"><span class="flabel">Sleep performance</span><div class="finput-wrap"><input class="finput" type="number" id="w-slpperf" min="0" max="100" placeholder="—" oninput="liveW()"/><span class="funit">%</span></div></div>
+  </div>
+
+  <div class="rings-row" style="margin-top:0">
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 82 82"><circle cx="41" cy="41" r="33" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/><circle id="wr-rec" cx="41" cy="41" r="33" fill="none" stroke="#00d68f" stroke-width="7" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="207" transform="rotate(-90 41 41)" style="transition:all .5s"/><text x="41" y="45" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" font-family="Inter,sans-serif" id="wt-rec">—</text></svg>
+      <div class="ring-name" style="color:var(--green)">Recovery</div>
+    </div>
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 82 82"><circle cx="41" cy="41" r="33" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/><circle id="wr-str" cx="41" cy="41" r="33" fill="none" stroke="#4db8ff" stroke-width="7" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="207" transform="rotate(-90 41 41)" style="transition:all .5s"/><text x="41" y="45" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" font-family="Inter,sans-serif" id="wt-str">—</text></svg>
+      <div class="ring-name" style="color:var(--blue)">Strain</div>
+    </div>
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 82 82"><circle cx="41" cy="41" r="33" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/><circle id="wr-slp" cx="41" cy="41" r="33" fill="none" stroke="#9d7fff" stroke-width="7" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="207" transform="rotate(-90 41 41)" style="transition:all .5s"/><text x="41" y="45" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" font-family="Inter,sans-serif" id="wt-slp">—</text></svg>
+      <div class="ring-name" style="color:var(--purple)">Sleep</div>
+    </div>
+  </div>
+
+  <div class="slabel">Body & Sleep Detail</div>
+  <div class="form-card">
+    <div class="form-row"><span class="flabel">HRV</span><div class="finput-wrap"><input class="finput" type="number" id="w-hrv" placeholder="—"/><span class="funit">ms</span></div></div>
+    <div class="form-row"><span class="flabel">Resting HR</span><div class="finput-wrap"><input class="finput" type="number" id="w-rhr" placeholder="—"/><span class="funit">bpm</span></div></div>
+    <div class="form-row"><span class="flabel">Sleep duration</span><div class="finput-wrap"><input class="finput" type="number" id="w-slpdur" step="0.1" placeholder="—"/><span class="funit">hrs</span></div></div>
+    <div class="form-row"><span class="flabel">REM sleep</span><div class="finput-wrap"><input class="finput" type="number" id="w-rem" step="0.1" placeholder="—"/><span class="funit">hrs</span></div></div>
+    <div class="form-row"><span class="flabel">Deep sleep</span><div class="finput-wrap"><input class="finput" type="number" id="w-deep" step="0.1" placeholder="—"/><span class="funit">hrs</span></div></div>
+    <div class="form-row"><span class="flabel">SpO2</span><div class="finput-wrap"><input class="finput" type="number" id="w-spo2" placeholder="—"/><span class="funit">%</span></div></div>
+  </div>
+  <div class="slabel">Profile</div>
+  <div class="form-card" style="margin-bottom:20px">
+    <div class="form-row"><span class="flabel">Body weight</span><div class="finput-wrap"><input class="finput" type="number" id="w-weight" placeholder="158"/><span class="funit">lbs</span></div></div>
+    <div class="form-row"><span class="flabel">Goal</span><select class="finput" id="w-goal" style="width:130px"><option>Fat Loss</option><option selected>Performance</option><option>Muscle Gain</option><option>Maintenance</option></select></div>
+  </div>
+  <button class="bigbtn bigbtn-green" onclick="saveWhoop()">Save Today's Data</button>
+  <div style="height:24px"></div>
+</div>
+
+<!-- ══ GYM ══ -->
+<div class="page" id="pg-gym">
+  <div class="topbar"><div><div class="topbar-title">Gym</div><div class="topbar-sub" id="gym-sub">Track your sets & weights</div></div></div>
+  <div class="slabel">Today — <span id="gym-day-name" style="color:#fff;text-transform:none;letter-spacing:0;font-size:11px;font-weight:700">Arms & Shoulders</span></div>
+  <div class="add-ex-row">
+    <input class="add-ex-input" id="ex-input" type="text" placeholder="Add exercise (e.g. Barbell Curl)" onkeydown="if(event.key==='Enter')addExercise()"/>
+    <button class="add-ex-btn" onclick="addExercise()">+ Add</button>
+  </div>
+  <div id="exercises-list"></div>
+  <div style="height:8px"></div>
+  <button class="bigbtn bigbtn-green" onclick="finishWorkout()" id="finish-btn" style="display:none">Finish & Save Workout</button>
+  <div class="slabel" id="hist-lbl" style="display:none">Workout History</div>
+  <div class="card" id="hist-list" style="display:none;margin-bottom:10px"></div>
+  <div class="slabel">Supplements</div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="goal-row" onclick="toggleSupp('morning')"><div class="gcheck" id="sc-morning"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div><div><div class="gtext">Morning stack</div><div style="font-size:12px;color:var(--text3);margin-top:2px">Creatine · Vitamin D · Omega-3</div></div></div>
+    <div class="goal-row" onclick="toggleSupp('evening')"><div class="gcheck" id="sc-evening"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,8.5 11,1"/></svg></div><div><div class="gtext">Evening stack</div><div style="font-size:12px;color:var(--text3);margin-top:2px">Magnesium · Vitamin D</div></div></div>
+  </div>
+</div>
+
+<!-- ══ COACH ══ -->
+<div class="coach-page" id="pg-coach">
+  <div class="coach-top">
+    <div class="coach-top-title">Claude</div>
+    <div class="coach-top-sub">Your personal health coach · knows your WHOOP + goals</div>
+  </div>
+  <div class="chat-msgs" id="chat-msgs">
+    <div class="cmsg ai"><div class="cav">AI</div><div class="cbubble">Hey! I'm Claude — your personal health coach. I know your gym split, WHOOP scores, and goals.<br><br>Tell me what today looks like and I'll plan everything — when to train, what to eat, your calorie target, all of it.</div></div>
+  </div>
+  <div class="chat-bottom">
+    <div class="qrow">
+      <button class="qchip" onclick="qsend('Plan my day — I have nothing going on today')">Plan my day</button>
+      <button class="qchip" onclick="qsend('What should I eat today based on my WHOOP?')">What to eat?</button>
+      <button class="qchip" onclick="qsend('How many calories should I have today?')">Calorie target?</button>
+      <button class="qchip" onclick="qsend('Should I train hard or take it easy today?')">Train hard?</button>
+      <button class="qchip" onclick="qsend('Give me a full meal plan for today')">Full meal plan</button>
+      <button class="qchip" onclick="qsend('How can I improve my sleep score?')">Better sleep?</button>
+    </div>
+    <div class="cinput-row">
+      <input class="cinput" id="cinput" type="text" placeholder="Ask anything about your day..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+      <button class="csend" onclick="sendMsg()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nitem active" id="nav-home" onclick="go('home')"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>Home</button>
+  <button class="nitem" id="nav-whoop" onclick="go('whoop')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>WHOOP</button>
+  <button class="nitem" id="nav-gym" onclick="go('gym')"><svg viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 17.5h11M4 12h16M2 9.5h2M20 9.5h2M2 14.5h2M20 14.5h2"/></svg>Gym</button>
+  <button class="nitem" id="nav-coach" onclick="go('coach')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Claude</button>
+</nav>
+
+<script>
+const CIRC=2*Math.PI*33;
+const SPLIT=[
+  {name:'Arms & Shoulders',sub:'Biceps · Triceps · Delts'},
+  {name:'Chest & Back',sub:'Chest · Lats · Traps · Rows'},
+  {name:'Legs',sub:'Quads · Hamstrings · Calves'},
+  {name:'Rest Day',sub:'Recovery · Stretch · Refuel'}
+];
+let chatHist=[],busy=false,todayExercises=[];
+let S={
+  water:0,streak:0,
+  goals:[false,false,false],
+  supps:{morning:false,evening:false},
+  cycleDay:0,workoutHistory:[],
+  whoop:{goal:'Performance',rec:null,hrv:null,rhr:null,strain:null,slpdur:null,slpperf:null,rem:null,deep:null,spo2:null,weight:158}
+};
+function save(){try{localStorage.setItem('wd6',JSON.stringify(S));}catch(e){}}
+function load(){try{const d=localStorage.getItem('wd6');if(d)S=Object.assign({},S,JSON.parse(d));}catch(e){}}
+
+function go(name){
+  ['home','whoop','gym'].forEach(n=>{const p=document.getElementById('pg-'+n);p.classList.remove('active');p.style.display='';});
+  const cp=document.getElementById('pg-coach');cp.classList.remove('active');cp.style.display='none';
+  document.querySelectorAll('.nitem').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+name).classList.add('active');
+  if(name==='coach'){cp.style.display='flex';setTimeout(()=>cp.classList.add('active'),10);}
+  else document.getElementById('pg-'+name).classList.add('active');
+}
+
+function sR(id,pct,color){const el=document.getElementById(id);if(!el)return;el.style.strokeDashoffset=CIRC-(CIRC*Math.min(1,Math.max(0,pct/100)));if(color)el.style.stroke=color;}
+function sT(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+
+function renderRings(){
+  const w=S.whoop;
+  if(w.rec!==null){
+    const rc=w.rec>=67?'#00d68f':w.rec>=34?'#f5a623':'#ff4d4d';
+    ['hr-rec','wr-rec'].forEach(id=>sR(id,w.rec,rc));
+    ['ht-rec','wt-rec'].forEach(id=>sT(id,w.rec+'%'));
+    sT('hb-rec',w.rec>=67?'Good':w.rec>=34?'Fair':'Low');
+    const pd=document.getElementById('pd-rec');if(pd)pd.style.background=rc;
+    sT('pt-rec','Recovery: '+(w.rec>=67?'Good':w.rec>=34?'Fair':'Low'));
+  }
+  if(w.strain!==null){['hr-str','wr-str'].forEach(id=>sR(id,w.strain/21*100,'#4db8ff'));['ht-str','wt-str'].forEach(id=>sT(id,w.strain));sT('hb-str',w.strain>=14?'High':w.strain>=8?'Moderate':'Low');}
+  if(w.slpperf!==null){['hr-slp','wr-slp'].forEach(id=>sR(id,w.slpperf,'#9d7fff'));['ht-slp','wt-slp'].forEach(id=>sT(id,w.slpperf+'%'));sT('hb-slp',w.slpperf>=80?'Good':w.slpperf>=60?'Fair':'Poor');}
+  if(w.rec!==null&&w.weight){
+    const maint=Math.round(w.weight*13.5);const bonus=w.rec>=67?400:w.rec>=34?200:0;
+    sT('pt-cal','~'+(maint+bonus).toLocaleString()+' cal today');
+    sT('pt-train',w.rec>=67?'Train hard':w.rec>=34?'Moderate':'Rest today');
+  }
+}
+
+function liveW(){
+  const r=parseFloat(document.getElementById('w-rec').value);
+  const st=parseFloat(document.getElementById('w-strain').value);
+  const sp=parseFloat(document.getElementById('w-slpperf').value);
+  if(!isNaN(r)){sR('wr-rec',r,r>=67?'#00d68f':r>=34?'#f5a623':'#ff4d4d');sT('wt-rec',r+'%');}
+  if(!isNaN(st)){sR('wr-str',st/21*100,'#4db8ff');sT('wt-str',st);}
+  if(!isNaN(sp)){sR('wr-slp',sp,'#9d7fff');sT('wt-slp',sp+'%');}
+}
+
+function saveWhoop(){
+  const g=id=>{const v=parseFloat(document.getElementById(id).value);return isNaN(v)?null:v;};
+  S.whoop={goal:document.getElementById('w-goal').value,rec:g('w-rec'),hrv:g('w-hrv'),rhr:g('w-rhr'),strain:g('w-strain'),slpperf:g('w-slpperf'),slpdur:g('w-slpdur'),rem:g('w-rem'),deep:g('w-deep'),spo2:g('w-spo2'),weight:parseFloat(document.getElementById('w-weight').value)||158};
+  save();renderRings();go('home');
+}
+
+// ── SCAN SCREENSHOT ──
+async function scanScreenshot(event){
+  const file=event.target.files[0];if(!file)return;
+  const preview=document.getElementById('scan-preview');
+  const status=document.getElementById('scan-status');
+  preview.style.display='block';status.style.display='block';
+  status.textContent='Reading your WHOOP screenshot...';
+  const reader=new FileReader();
+  reader.onload=async()=>{
+    preview.src=reader.result;
+    const b64=reader.result.split(',')[1];
+    const mime=file.type||'image/jpeg';
+    try{
+      const res=await fetch('/api/chat',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          },
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:500,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:mime,data:b64}},
+            {type:'text',text:`This is a screenshot from the WHOOP app. Extract all the health metrics you can see. Return ONLY a JSON object with these exact keys (use null if not visible): {"recovery":number,"strain":number,"sleepPerformance":number,"hrv":number,"restingHR":number,"sleepDuration":number,"rem":number,"deepSleep":number,"spo2":number}. Numbers only, no units. sleepDuration and rem and deepSleep in hours as decimals.`}
+          ]}]
+        })
+      });
+      const d=await res.json();
+      const txt=d.content?.map(b=>b.text||'').join('')||'';
+      const jsonMatch=txt.match(/\{[\s\S]*\}/);
+      if(!jsonMatch)throw new Error('Could not read scores');
+      const scores=JSON.parse(jsonMatch[0]);
+      // fill fields
+      const map={recovery:'w-rec',strain:'w-strain',sleepPerformance:'w-slpperf',hrv:'w-hrv',restingHR:'w-rhr',sleepDuration:'w-slpdur',rem:'w-rem',deepSleep:'w-deep',spo2:'w-spo2'};
+      let filled=0;
+      Object.entries(map).forEach(([k,id])=>{
+        if(scores[k]!==null&&scores[k]!==undefined){
+          const el=document.getElementById(id);if(el){el.value=scores[k];filled++;}
+        }
+      });
+      liveW();
+      status.style.color='var(--green)';
+      status.textContent=`✓ Filled in ${filled} scores — review and tap Save`;
+    }catch(e){
+      status.style.color='var(--red)';
+      status.textContent='Could not read screenshot. Try a clearer image or enter manually.';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderGymDay(){
+  const d=SPLIT[S.cycleDay%4];
+  sT('day-name',d.name);sT('day-sub',d.sub);sT('cycle-num',(S.cycleDay%4)+1);sT('gym-day-name',d.name);
+  const dots=document.getElementById('day-dots');
+  if(dots)dots.innerHTML=SPLIT.map((_,i)=>`<div class="day-dot${i<S.cycleDay%4?' done':i===S.cycleDay%4?' active':''}"></div>`).join('');
+}
+function markGymDone(){S.cycleDay++;S.goals[1]=true;save();renderGymDay();renderHome();}
+function markRestDay(){S.cycleDay++;save();renderGymDay();}
+function skipDay(){save();renderGymDay();}
+
+function renderHome(){
+  const now=new Date();const h=now.getHours();
+  sT('greeting',h<12?'Good morning':h<17?'Good afternoon':'Good evening');
+  sT('datestr',now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}));
+  sT('water-num',S.water);sT('streak-num',S.streak);
+  const wd=document.getElementById('wdots');
+  if(wd)wd.innerHTML=Array.from({length:8},(_,i)=>`<div class="wdot${i<S.water?' on':''}"></div>`).join('');
+  S.goals.forEach((_,i)=>{
+    const gc=document.getElementById('gc'+i);const gt=document.getElementById('gt'+i);
+    if(gc)gc.classList.toggle('done',S.goals[i]);
+    if(gt)gt.classList.toggle('done',S.goals[i]);
+  });
+}
+
+function addWater(){S.water=Math.min(S.water+1,16);save();renderHome();}
+function toggleGoal(i){S.goals[i]=!S.goals[i];if(S.goals.every(Boolean))S.streak++;save();renderHome();}
+function toggleSupp(k){const e=document.getElementById('sc-'+k);if(e)e.classList.toggle('done',!e.classList.contains('done'));S.supps[k]=document.getElementById('sc-'+k).classList.contains('done');save();}
+
+function addExercise(){
+  const inp=document.getElementById('ex-input');const name=inp.value.trim();if(!name)return;
+  inp.value='';todayExercises.push({name,sets:[{reps:'',weight:''}]});renderExercises();
+}
+function addSet(ei){todayExercises[ei].sets.push({reps:'',weight:''});renderExercises();}
+function removeSet(ei,si){todayExercises[ei].sets.splice(si,1);if(!todayExercises[ei].sets.length)todayExercises[ei].sets.push({reps:'',weight:''});renderExercises();}
+function removeExercise(ei){todayExercises.splice(ei,1);renderExercises();}
+function updateSet(ei,si,field,val){todayExercises[ei].sets[si][field]=val;}
+function renderExercises(){
+  const list=document.getElementById('exercises-list');
+  document.getElementById('finish-btn').style.display=todayExercises.length?'block':'none';
+  list.innerHTML=todayExercises.map((ex,ei)=>`
+    <div class="exercise-card">
+      <div class="ex-header"><div class="ex-name">${ex.name}</div><button class="ex-del" onclick="removeExercise(${ei})">×</button></div>
+      <table class="sets-table">
+        <tr><th>Set</th><th>Weight</th><th>Reps</th><th></th></tr>
+        ${ex.sets.map((s,si)=>`<tr><td><span class="set-num">${si+1}</span></td><td><input class="set-input" type="number" placeholder="lbs" value="${s.weight}" oninput="updateSet(${ei},${si},'weight',this.value)"/></td><td><input class="set-input" type="number" placeholder="reps" value="${s.reps}" oninput="updateSet(${ei},${si},'reps',this.value)"/></td><td><button class="set-del" onclick="removeSet(${ei},${si})">−</button></td></tr>`).join('')}
+      </table>
+      <div class="ex-footer"><button class="ex-add-set" onclick="addSet(${ei})">+ Add set</button></div>
+    </div>`).join('');
+}
+function finishWorkout(){
+  if(!todayExercises.length)return;
+  S.workoutHistory.unshift({date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),day:SPLIT[S.cycleDay%4].name,exercises:todayExercises.map(e=>({...e,sets:[...e.sets]}))});
+  todayExercises=[];save();renderExercises();renderHistory();sT('gym-sub',S.workoutHistory.length+' workouts logged');
+}
+function renderHistory(){
+  const lbl=document.getElementById('hist-lbl');const list=document.getElementById('hist-list');
+  if(!S.workoutHistory.length){lbl.style.display='none';list.style.display='none';return;}
+  lbl.style.display='';list.style.display='';
+  list.innerHTML=S.workoutHistory.slice(0,5).map(w=>`<div class="history-item"><div class="history-date">${w.date} · ${w.day}</div><div class="history-ex">${w.exercises.map(e=>{const sets=e.sets.filter(s=>s.reps||s.weight);return '<strong>'+e.name+'</strong>'+(sets.length?' — '+sets.map(s=>`${s.weight}lbs×${s.reps}`).join(', '):'');}).join('<br>')}</div></div>`).join('');
+}
+
+function planMyDay(){
+  const txt=document.getElementById('today-input').value.trim();if(!txt)return;
+  document.getElementById('today-input').value='';
+  go('coach');
+  setTimeout(()=>{document.getElementById('cinput').value='Plan my day around this schedule: '+txt;sendMsg();},200);
+}
+
+function sysPrompt(){
+  const w=S.whoop;
+  const maint=Math.round((w.weight||158)*13.5);
+  const target=maint+(w.rec>=67?400:w.rec>=34?200:0);
+  const today=SPLIT[S.cycleDay%4].name;
+  const hasW=w.rec!==null;
+  const gymHist=S.workoutHistory.length?S.workoutHistory.slice(0,3).map(h=>h.date+' ('+h.day+'): '+h.exercises.map(e=>e.name+(e.sets.filter(s=>s.weight).length?' '+e.sets.filter(s=>s.weight).map(s=>s.weight+'lbs×'+s.reps).join(','):'')).join(' | ')).join(' // '):'No history yet.';
+  return `You are Claude — a personal health coach inside the user's app. Direct, specific, like a smart friend. Never generic.
+
+USER PROFILE:
+- Gym split: Arms & Shoulders → Chest & Back → Legs (sometimes rest instead) → repeat
+- Today's scheduled workout: ${today}
+- Goal: ${w.goal||'Performance'}
+- Weight: ${w.weight||158}lbs
+- Maintenance: ~${maint} cal | Today's target: ~${target} cal
+- Recent gym history: ${gymHist}
+
+${hasW?`WHOOP TODAY:
+- Recovery: ${w.rec}% (${w.rec>=67?'green/good — push hard':w.rec>=34?'yellow/fair — moderate effort':'red/low — body needs rest'})
+- HRV: ${w.hrv}ms | RHR: ${w.rhr}bpm
+- Strain yesterday: ${w.strain}/21
+- Sleep: ${w.slpdur}hrs total, ${w.slpperf}% performance, ${w.rem}hrs REM, ${w.deep}hrs deep
+- SpO2: ${w.spo2}%`:'WHOOP data not entered yet — help anyway with what you know, encourage them to add scores for better advice.'}
+
+Summer context: No fixed routine, days vary. When they tell you their day, find the optimal training window and plan meals around their actual schedule. Reference their real numbers. Under 150 words unless they ask for a detailed plan.`;
+}
+
+async function callClaude(msg){
+  chatHist.push({role:'user',content:msg});
+  const r=await fetch('/api/chat',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      },
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sysPrompt(),messages:chatHist})
+  });
+  const d=await r.json();
+  const t=d.content?.map(b=>b.text||'').join('')||'Something went wrong.';
+  chatHist.push({role:'assistant',content:t});
+  return t;
+}
+function appendMsg(txt,role){
+  const msgs=document.getElementById('chat-msgs');
+  const div=document.createElement('div');div.className='cmsg '+role;
+  div.innerHTML=(role==='ai'?'<div class="cav">AI</div>':'')+`<div class="cbubble">${txt}</div>`;
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;return div;
+}
 async function sendMsg(){
   if(busy)return;
   const inp=document.getElementById('cinput');const txt=inp.value.trim();if(!txt)return;
@@ -26,4 +591,3 @@ if(S.workoutHistory.length)sT('gym-sub',S.workoutHistory.length+' workouts logge
 </script>
 </body>
 </html>
-
