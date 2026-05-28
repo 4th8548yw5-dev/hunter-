@@ -180,7 +180,7 @@ input[type=file]{display:none}
     </div>
   </div>
   <div class="pills-row">
-    <div class="spill"><div class="sdot" id="pd-rec" style="background:var(--text3)"></div><span id="pt-rec">Add WHOOP scores</span></div>
+<div class="spill"><div class="sdot" id="pd-rec" style="background:var(--green)"></div><a href="/api/whoop-auth" style="color:var(--green);text-decoration:none;font-weight:700" id="pt-rec">Connect WHOOP →</a></div>
     <div class="spill"><div class="sdot" style="background:var(--blue)"></div><span id="pt-cal">— cal target</span></div>
     <div class="spill"><div class="sdot" style="background:var(--yellow)"></div><span id="pt-train">— training</span></div>
   </div>
@@ -585,8 +585,7 @@ function restoreForm(){
   const g=document.getElementById('w-goal');if(g)g.value=w.goal||'Performance';
   Object.keys(S.supps).forEach(k=>{const e=document.getElementById('sc-'+k);if(e)e.classList.toggle('done',S.supps[k]);});
   liveW();
-}
-load();renderHome();renderRings();renderGymDay();renderExercises();renderHistory();restoreForm();
+}const wd=localStorage.getItem('whoop_data');if(wd){try{const w=JSON.parse(wd);S.whoop=Object.assign(S.whoop,w);localStorage.removeItem('whoop_data');save();}catch(e){}}load();renderHome();renderRings();renderGymDay();renderExercises();renderHistory();restoreForm();
 if(S.workoutHistory.length)sT('gym-sub',S.workoutHistory.length+' workouts logged');
 </script>
 </body>
